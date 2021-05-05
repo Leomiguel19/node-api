@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 
 // Ruta o método de prueba
+/*
 app.get('/probando', (req,res) =>{
     
     return res.status(200).send({
@@ -25,6 +26,7 @@ app.get('/probando', (req,res) =>{
         url: 'leomiguel.com'
     })
 })
+*/
 
 // Exportar modulo (fichero actual)
 module.exports = app;
