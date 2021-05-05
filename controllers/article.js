@@ -18,4 +18,6 @@ let controller = {
             message: 'Soy la acción test del controlador de articulos'
         })
     }
-}
+};
+
+module.exports = controller;

@@ -7,26 +7,18 @@ let bodyParser = require('body-parser');
 // Ejecutar express (http)
 let app = express();
 
+// Cargar ficheros rutas
+let article_routes = require('./routes/article');
+
 // Middlewares
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 // CORS
 
-// Añadir prefijos a rutas
+// Añadir prefijos a rutas / cargar rutas
+app.use('/api', article_routes);
 
-
-// Ruta o método de prueba
-/*
-app.get('/probando', (req,res) =>{
-    
-    return res.status(200).send({
-        area: 'Practicando nodeJS',
-        autor: 'Leonardo Guilarte',
-        url: 'leomiguel.com'
-    })
-})
-*/
 
 // Exportar modulo (fichero actual)
 module.exports = app;
