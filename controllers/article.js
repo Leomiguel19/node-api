@@ -1,7 +1,7 @@
 'use strict'
 
 let validator = require('validator');
-var Article = require('../models/article');
+let Article = require('../models/article');
 
 let controller = {
     
@@ -38,18 +38,32 @@ let controller = {
 
         if(validate_title && validate_description){            
             // Crear el objeto a guardar
-
+            let article = new Article();
+            
             // Asignar valores
+            article.title = params.title;
+            article.description = params.description;
+            article.image = null;
 
             // Guardar el artículo
+            article.save((err, articleStored) => {
+                if(err || !articleStored){
+                    return res.status(404).send({
+                        status: 'error',
+                        message: 'El artículo no se ha guardado'
+                    })
+                }
 
-            // Devolver una respuesta
-
-            return res.status(200).send({
-                article: params
+                // Devolver una respuesta
+                return res.status(200).send({
+                    status: 'success',
+                    article: articleStored
+                })                
             })
+
         }else{
             return res.status(200).send({
+                status: 'error',
                 message: 'Los datos no son válidos!!'
             })
         }
