@@ -196,6 +196,26 @@ let controller = {
             })
         })
  
+    },
+
+    upload: (req, res) => {
+        // Configurar el módulo connect multiparty router/article.js
+        
+
+        // Recoger el fichero de la petición
+
+        // Conseguir el nombre y la extension del archivo
+
+        // Comprobar la extension, solo imágenes, si es válida borrar el fichero
+
+        // Si todo es válido
+
+        // Buscar el artículo, asignarle el nombre de la imagen y actualizarlo
+
+        return res.status(200).send({
+            status: 'success',
+            message: 'Soy el método upload !!!'
+        })
     }
 };
 
