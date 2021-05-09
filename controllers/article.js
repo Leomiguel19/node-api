@@ -102,6 +102,39 @@ let controller = {
                 articles
             })
         })
+    },
+
+    getArticle: (req, res) => {
+        
+        // Recoger el id de la url
+        let articleId = req.params.id;
+
+        // Comprobar que existe
+        
+        if(!articleId || articleId == null){
+            return res.status(404).send({
+                status: 'error',
+                message: 'No existe el artículo !!!'
+            })
+        }
+
+        // Buscar el articulo
+        Article.findById(articleId, (err, article) => {
+
+            if(err || !article){
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'No existe el artículo !!!'
+                })
+            }
+
+            // Devolver en json
+            return res.status(404).send({
+                status: 'success',
+                article
+            })            
+        });
+
     }
 };
 
