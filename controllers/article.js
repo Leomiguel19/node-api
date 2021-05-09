@@ -1,6 +1,9 @@
 'use strict'
 
 let validator = require('validator');
+let fs = require('fs');
+let path = require('path');
+
 let Article = require('../models/article');
 
 let controller = {
@@ -199,24 +202,63 @@ let controller = {
     },
 
     upload: (req, res) => {
-        // Configurar el módulo connect multiparty router/article.js
-        
+        // Configurar el módulo connect multiparty router/article.js        
 
         // Recoger el fichero de la petición
+        let file_name = 'Imagen no subida'
+
+        if(!req.files){
+            return res.status(404).send({
+                status: 'error',
+                message: file_name
+            })
+        }
 
         // Conseguir el nombre y la extension del archivo
+        let file_path = req.files.file0.path;
+
+        // * ADVERTENCIA * En caso de estar linux o mac, esta línea va así :
+        let file_split = file_path.split('/');
+        // * ADVERTENCIA * En caso de estar windows, iria así :
+        // let file_split = file_path.split('\');
+
+        // Nombre del archivo
+        file_name = file_split[2];
+
+        // Extension del fichero 
+        let extension_split  = file_name.split('\.');
+        let file_ext = extension_split[1];
 
         // Comprobar la extension, solo imágenes, si es válida borrar el fichero
+        if(file_ext != 'png' && file_ext != 'jpg' && file_ext != 'jpeg' && file_ext != 'gif'){
+            // Borrar el archivo subido
+            fs.unlink(file_path, (err) => {
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'La extensión del archivo no es válida !!!'
+                })
+            })
+        }else{
+            // Si todo es válido, sacando id de la url
+            let articleId = req.params.id;
 
-        // Si todo es válido
+            // Buscar el artículo, asignarle el nombre de la imagen y actualizarlo
+            Article.findOneAndUpdate({_id: articleId}, {image: file_name}, {new: true}, (err, articleUpdated) =>{
+                
+                if(err || !articleUpdated){
+                    return res.status(500).send({
+                        status: 'error',
+                        message: 'error al guardar la imagen del articulo'
+                    });
+                }
 
-        // Buscar el artículo, asignarle el nombre de la imagen y actualizarlo
-
-        return res.status(200).send({
-            status: 'success',
-            message: 'Soy el método upload !!!'
-        })
-    }
+                return res.status(200).send({
+                    status: 'success',
+                    article: articleUpdated 
+                });    
+            });
+        }
+    }// end upload method
 };
 
 module.exports = controller;
