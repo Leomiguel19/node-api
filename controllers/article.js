@@ -258,7 +258,23 @@ let controller = {
                 });    
             });
         }
-    }// end upload method
+    },// end upload method
+
+    getImage: (req, res) => {
+         let file = req.params.image;
+         let path_file = './upload/articles/'+file;
+
+         fs.exists(path_file, (exists) => {
+            if(exists){
+                return res.sendfile(path.resolve(path_file));
+            }else{
+                return res.status(404).send({
+                    status: 'error',
+                    message: 'La imagen no existe'
+                })
+            }
+         });
+    },
 };
 
 module.exports = controller;
